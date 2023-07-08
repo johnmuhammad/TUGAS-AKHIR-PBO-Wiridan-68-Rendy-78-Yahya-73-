@@ -1,7 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton, QDialog, QMessageBox, QVBoxLayout, QFormLayout, QDateEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton, QDialog, QMessageBox, QVBoxLayout, QFormLayout, QDateEdit ,QComboBox
 from PyQt5.QtCore import Qt, QDate, pyqtSignal, QObject
-
+from PyQt5.QtGui import QIntValidator
 
 class Communicate(QObject):
     form_submitted = pyqtSignal(str, str, str, str, str, str, str)
@@ -28,8 +28,12 @@ class MainWindow(QMainWindow):
         self.label_country = QLabel("Negara:")
         self.lineedit_country = QLineEdit()
 
-        self.label_gender = QLabel("Jenis Kelamin:")
-        self.lineedit_gender = QLineEdit()
+
+        self.lineedit_gender = QLabel("Jenis Kelamin:")
+        self.combo_box_gender = QComboBox(self)
+        self.combo_box_gender.addItem("Laki-laki")
+        self.combo_box_gender.addItem("Perempuan")
+
 
         self.label_birthdate = QLabel("Tanggal Lahir:")
         self.dateedit_birthdate = QDateEdit()
@@ -41,13 +45,13 @@ class MainWindow(QMainWindow):
         self.dateedit_expired.setDisplayFormat("dd/MM/yyyy")
         self.dateedit_expired.setDate(QDate.currentDate().addYears(10))
 
-        self.label_registration = QLabel("Nomor Registrasi:")
+        self.label_registration = QLabel("Nomor Registrasi(hanya bisa di isi angka):")
         self.lineedit_registration = QLineEdit()
-
+        self.lineedit_registration.setValidator(QIntValidator())
         form_layout.addRow(self.label_name, self.lineedit_name)
         form_layout.addRow(self.label_address, self.lineedit_address)
         form_layout.addRow(self.label_country, self.lineedit_country)
-        form_layout.addRow(self.label_gender, self.lineedit_gender)
+        form_layout.addRow(self.lineedit_gender,self.combo_box_gender)
         form_layout.addRow(self.label_birthdate, self.dateedit_birthdate)
         form_layout.addRow(self.label_expired, self.dateedit_expired)
         form_layout.addRow(self.label_registration, self.lineedit_registration)
@@ -65,7 +69,7 @@ class MainWindow(QMainWindow):
         name = self.lineedit_name.text()
         address = self.lineedit_address.text()
         country = self.lineedit_country.text()
-        gender = self.lineedit_gender.text()
+        gender =self.combo_box_gender.currentText()
         birthdate = self.dateedit_birthdate.date().toString(Qt.ISODate)
         expired = self.dateedit_expired.date().toString(Qt.ISODate)
         registration = self.lineedit_registration.text()
